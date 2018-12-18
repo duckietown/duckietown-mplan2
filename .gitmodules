@@ -1,0 +1,3 @@
+[submodule "duckietown-fplan"]
+	path = duckietown-fplan
+	url = https://github.com/alessandromorra/duckietown-fplan.git

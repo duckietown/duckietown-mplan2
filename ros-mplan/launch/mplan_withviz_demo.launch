@@ -1,0 +1,38 @@
+<launch>
+
+  <arg name="n_duckies" default="2"/>
+
+  <!-- choose the specific demo you want to see -->
+  <arg name="demo_num" default="1"/>
+  <!-- 1 = dynamic passing of a moving object-->
+  <!-- 2 = passing of a static object with a dynamic object on the other sode of the street -->
+  <!-- 3 = blocked road -->
+  <!-- 4 = street passing duckie -->
+  <!-- 5 = multiple obstacles and curves -->
+  <rosparam file="$(find duckietown_mplan)/config/demos/$(arg demo_num)/mplan_params.yaml" command="load"/>
+  <rosparam file="$(find duckietown_mplan)/config/demos/$(arg demo_num)/mplan_objects.yaml" command="load"/>
+
+  <arg name="rviz_config"
+      default="$(find duckietown_mplan)/config/demos/$(arg demo_num)/$(arg demo_num).rviz"/>
+  <arg name="map_name" default="robotarium1"/>
+
+  <!-- OBSTACLE AVOIDANCE NODES -->
+  <node name="trajectory_creator_node" pkg="duckietown_mplan" type="trajectory_creator_node.py" output="screen"/>
+  <node name="trajectory_sampler_node" pkg="duckietown_mplan" type="trajectory_sampler_node.py" output="screen"/>
+
+
+  <!-- SIMULATION NODES -->
+  <node pkg="flock_simulator" name="flock_simulator_node" type="flock_simulator_node.py" output="screen">
+      <param name="map_name" value="$(arg map_name)"/>
+      <param name="n_duckies" value="$(arg n_duckies)"/>
+  </node>
+  <node name="fleet_planner_wrapper_node" pkg="duckietown_mplan" type="fleet_planner_wrapper_node.py" output="screen"/>
+
+  <!-- VISUALIZATION NODES -->
+  <include file="$(find flock_simulator)/launch/visualization.launch">
+    <arg name="map_name" value="$(arg map_name)"/>
+    <arg name="rviz_config" value="$(arg rviz_config)"/>
+  </include>
+  <node name="path_viz" pkg="duckietown_mplan" type="path_viz_node.py" output="screen"/>
+
+</launch>

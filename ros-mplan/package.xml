@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <name>duckietown_mplan</name>
+  <version>0.0.1</version>
+  <description>
+    A pipeline for lane following and obstacle avoidance
+  </description>
+
+  <author email="lgulich@ethz.ch">Lionel Gulich</author>
+  <author email="vklemm@ethz.ch">Victor Klemm</author>
+  <author email="dominikm@ethz.ch">Dominik Mannhart</author>
+  <author email="morraa@ethz.ch">Alessandro Morra</author>
+
+  <maintainer email="lgulich@ethz.ch">Lionel Gulich</maintainer>
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>mplan_msgs</build_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>mplan_msgs</run_depend>
+
+</package>

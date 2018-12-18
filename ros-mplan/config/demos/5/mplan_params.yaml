@@ -1,0 +1,46 @@
+# PIPELINE PARAMETER
+cost_grid:
+  depth:
+    time: 6 # discrete time steps
+    x: 6 # no. of deltas for length
+    y: 5 # no. of deltas for width
+  delta:
+    time: 0.5 #[s]
+    x: 0.2 #[m]
+    y: 0.1 #[m]
+
+cost_function:
+  obstacles:
+    frac: 1
+    duckie_bot:
+      radius: 0.3
+  push_fwd:
+    frac: 1
+    stand_cost: 1.0
+    allow_speed: 0.1
+  street_bound:
+    frac: 0.4
+
+velocity:
+  max: 0.225 #[m/s] (must be >= max(dy/dt, dx/dt))
+
+duckietown:
+  tile_size: 0.585
+
+trajectory_sampler:
+  velocity:
+    max: 2.0
+  omega:
+    max: 5.0
+  distance:
+    min: 0.05
+  target_time: 0.5
+  k_vel: 1.0
+  k_p: 4.0
+  k_i: 0.0
+  k_d: 0.0
+
+always_go_straight: TRUE
+
+actor_duckiebot_id: "duckie-0"
+manual_duckiebot_id: "duckie-1"

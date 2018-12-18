@@ -1,0 +1,30 @@
+<launch>
+
+  <rosparam file="$(find duckietown_mplan)/config/mplan_params.yaml" command="load"/>
+  <rosparam file="$(find duckietown_mplan)/config/mplan_objects.yaml" command="load"/>
+
+  <arg name="rviz_config" default="$(find duckietown_mplan)/config/default.rviz"/>
+  <arg name="map_name" default="robotarium1"/>
+  <arg name="n_duckies" default="3"/>
+
+  <!-- OBSTACLE AVOIDANCE NODES -->
+  <node pkg="duckietown_mplan" type="trajectory_creator_node.py" name="trajectory_creator_node" output="screen"/>
+  <node pkg="duckietown_mplan" type="trajectory_sampler_node.py" name="trajectory_sampler_node" output="screen"/>
+
+
+  <!-- SIMULATION NODES -->
+  <node pkg="flock_simulator" name="flock_simulator_node" type="flock_simulator_node.py" output="screen">
+      <param name="map_name" value="$(arg map_name)"/>
+      <param name="n_duckies" value="$(arg n_duckies)"/>
+  </node>
+  <node name="fleet_planner_wrapper_node" pkg="duckietown_mplan" type="fleet_planner_wrapper_node.py" output="screen"/>
+
+  <!-- VISUALIZATION NODES -->
+  <include file="$(find flock_simulator)/launch/visualization.launch">
+    <arg name="map_name" value="$(arg map_name)"/>
+    <arg name="rviz_config" value="$(arg rviz_config)"/>
+  </include>
+  <node name="path_viz" pkg="duckietown_mplan" type="path_viz_node.py" output="screen"/>
+
+
+</launch>

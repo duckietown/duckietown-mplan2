@@ -1,0 +1,37 @@
+# SIMULATION ENVIRONMENT PARAMETERS
+
+num_actors: 1 # int
+num_obst: 2 # int
+num_obst_rand: 1 # int
+
+actor-0:
+  id: 0
+  x_pos_set: 2.5
+  y_pos_set: 0.25
+  theta_set: 0.0
+
+obst_rand:
+  dist_max: 10.0
+  size_max: 0.1
+
+obst-0:
+  id: 0
+  x_start: 3.0
+  x_end: 3.0
+  y_start: 0.1
+  y_end: 0.1
+  x_dim: 0.1
+  y_dim: 0.1
+  z_dim: 0.1
+  time: 20.0
+
+obst-1:
+  id: 1
+  x_start: 5.0
+  x_end: 5.0
+  y_start: 0.1
+  y_end: 0.1
+  x_dim: 0.1
+  y_dim: 0.1
+  z_dim: 0.1
+  time: 20.0
