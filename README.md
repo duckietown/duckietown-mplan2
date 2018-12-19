@@ -29,6 +29,8 @@ using `pipenv`:
 
 ## Software architecture
 
+![software_architecure.jpg](https://raw.githubusercontent.com/duckietown/duckietown-mplan2/master/resources/software_architecure.jpg)
+
 The pipeline is divided up into two main nodes which communicate via topic communication.
 
 [add graph]
