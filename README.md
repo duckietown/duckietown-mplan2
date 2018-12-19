@@ -10,7 +10,9 @@
 
 # Duckietown Mplan
 
-A versatile lane following algorithm for obstacle avoidance
+A versatile lane following algorithm for obstacle avoidance.
+
+The Obstavoid algorithm is based on a shortest path optimisation problem, which seeks the best way through a weighted, three dimensional space-time grid. The three main pillars necessary for this problem setting are the design of a suitable cost function to define the actor’s behaviour, a graph search algorithm to determine the optimal trajectory and a sampler, which extracts the desired steering commands from a given trajectory and the actor’s position
 
 
 ## Installation from source
@@ -25,7 +27,27 @@ using `pipenv`:
     $ python setup.py develop --no-deps
 
 
-## Unit tests
+## Software architecture
+
+The pipeline is divided up into two main nodes which communicate via topic communication.
+
+[add graph]
+
+**/trajectory_creator_node [frequency: 10hz]**
+* **Input**: */flock_simulator/ state* and */flock_simulator/street_obstruction*: These topics contain position, velocity and size infromation of all obstacles as well as information about the street and where the actor is at the moment. 
+* **Computation**: 
+**cost_grid_populator:** This manipulator uses the information stored in the obstacles and evaulates the cost function at the discretized points of the cost_grid.
+**cost_grid_solver:** This manipulator finds an optimal path in the cost_grid while minimizing total cost.
+* **Output:** */obst_avoid/trajectory*: This topic contains a target trajectory for the current cost_grid.
+
+**/trajectory_sampler_node [frequency: 10 hz]**
+* **Input**: */obst_avoid/trajectory*: This topic contains a target trajectory for the current cost_grid.
+* **Computation**: 
+**trajectory_sampler:** This manipulator uses the trajectory and derives the steering commands for the actor duckiebot.
+* **Output:** */obst_avoid/trajectory*: This topic contains the current target linear and angular velocity of the bot.
+
+
+## Unit tests - TODO
 
 Run this:
 
