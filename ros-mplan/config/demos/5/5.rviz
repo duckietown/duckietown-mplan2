@@ -117,7 +117,7 @@ Visualization Manager:
       Marker Topic: /flock_simulator/street_obstructions
       Name: Obstructions
       Namespaces:
-        street_obstruction: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -125,7 +125,7 @@ Visualization Manager:
       Marker Topic: /duckiebots_markers
       Name: DuckieBots
       Namespaces:
-        duckiebots: true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -189,5 +189,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 3710
-  X: 130
-  Y: 48
+  X: 3970
+  Y: 716
