@@ -39,9 +39,6 @@ git clone git@github.com:duckietown/duckietown-mplan2.git
 
 cd duckietown-mplan2
 
-# current fix, as our proper branch is not yet the master
-git checkout master
-
 pip install -r lib-mplan/requirements.txt
 
 git submodule update --init --recursive
