@@ -3,7 +3,7 @@
   <arg name="n_duckies" default="2"/>
 
   <!-- choose the specific demo you want to see -->
-  <arg name="demo_num" default="2"/>
+  <arg name="demo_num" default="5"/>
   <!-- 1 = dynamic passing of a moving object-->
   <!-- 2 = passing of a static object with a dynamic object on the other sode of the street -->
   <!-- 3 = blocked road -->
