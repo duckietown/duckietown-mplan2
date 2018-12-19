@@ -14,6 +14,7 @@ A versatile lane following algorithm for obstacle avoidance.
 
 The Obstavoid algorithm is based on a shortest path optimisation problem, which seeks the best way through a weighted, three dimensional space-time grid. The three main pillars necessary for this problem setting are the design of a suitable cost function to define the actor’s behaviour, a graph search algorithm to determine the optimal trajectory and a sampler, which extracts the desired steering commands from a given trajectory and the actor’s position
 
+![demo_1_no_cost_grid](https://user-images.githubusercontent.com/32458198/50254958-56837180-03f0-11e9-8e8b-1a34f42c1285.gif)
 
 ## Installation from source
 
@@ -33,8 +34,6 @@ using `pipenv`:
 
 
 The pipeline is divided up into two main nodes which communicate via topic communication.
-
-[add graph]
 
 **/trajectory_creator_node [frequency: 10hz]**
 * **Input**: */flock_simulator/ state* and */flock_simulator/street_obstruction*: These topics contain position, velocity and size infromation of all obstacles as well as information about the street and where the actor is at the moment. 
