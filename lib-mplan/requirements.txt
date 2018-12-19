@@ -3,7 +3,7 @@
 # -e git://github.com/duckietown/duckietown-world.git@master18d#egg=duckietown-world
 
 # testing
-# comptests==1.4.27
+comptests==1.4.27 # !!! networkx==1.1 is overwritten to 2.2 !!!
 coverage
 coveralls
 bumpversion
@@ -12,6 +12,7 @@ nbconvert
 twine
 
 # for library
+networkx==2.2 # !!! without this comptests would install networkx 1.1, which will cause that the duckietown-world cannot load the enviroment !!!
 catkin==0.7.14
 catkin-pkg==0.4.9
 catkin-tools==0.4.4
