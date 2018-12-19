@@ -315,16 +315,16 @@ class CostGrid:
                 marker.type = Marker.CYLINDER
                 marker.header.frame_id = "/map"
                 marker.action = Marker.ADD
-                marker.scale.x = 0.05
-                marker.scale.y = 0.05
-                marker.scale.z = cost
+                marker.scale.x = 0.03
+                marker.scale.y = 0.03
+                marker.scale.z = cost / 10.0
                 marker.color.a = 0.5
                 marker.color.r = cost
                 marker.color.g = 0.1
                 marker.color.b = 0.1
                 marker.pose.position.x = self.getXWorld(i,j,k)
                 marker.pose.position.y = self.getYWorld(i,j,k)
-                marker.pose.position.z = self.getTPos(i,j,k) + cost / 2
+                marker.pose.position.z = - 0.05 + (self.getTPos(i,j,k) + cost / 2.0)/10
 
                 marker_array_msg.markers.append(marker)
 

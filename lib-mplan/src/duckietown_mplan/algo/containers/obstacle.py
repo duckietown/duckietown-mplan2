@@ -81,7 +81,7 @@ class Obstacle:
         radius = sp.Symbol('radius')
         t = sp.Symbol('t')
 
-        max_cost = 100 # cost at radius = max_cost/2
+        max_cost = 2 # cost at radius = max_cost/2
         function_degree = 100
 
         obstacle_cost_fun = sp.Function('obstacles_fun')
@@ -161,7 +161,7 @@ class Obstacle:
         self.x_dot = 0 # TODO
         self.y_dot = 0 # TODO
         list = [msg.scale.x, msg.scale.y, msg.scale.z]
-        self.radius = max(list)+0.102347592734337456
+        self.radius = max(list)+0.10
         # max(list)/2
         # print(self.radius)
         # print(self)
