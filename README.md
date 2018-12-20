@@ -12,7 +12,7 @@
 
 A versatile lane following algorithm for obstacle avoidance.
 
-The Obstavoid algorithm is based on a shortest path optimisation problem, which seeks the best way through a weighted, three dimensional space-time grid. The three main pillars necessary for this problem setting are the design of a suitable cost function to define the actor’s behaviour, a graph search algorithm to determine the optimal trajectory and a sampler, which extracts the desired steering commands from a given trajectory and the actor’s position.
+The Obstavoid Algorithm is based on a shortest path optimization problem, which seeks the best way through a weighted, three dimensional space-time grid. The three main pillars necessary for this problem setting are the design of a suitable cost function to define the actor’s behaviour, a graph search algorithm to determine the optimal trajectory and a sampler, which extracts the desired steering commands from a given trajectory and the actor’s position.
 
 ![demo_1_no_cost_grid](https://user-images.githubusercontent.com/32458198/50254958-56837180-03f0-11e9-8e8b-1a34f42c1285.gif)
 
@@ -108,7 +108,7 @@ Using 'i', 'j', 'l', ',' you can now teleoperate another duckiebot. With 'q', 'w
 
  * 1 : Networkx library was not found: Double check that all installations were completed IN the virtual environment, especially the requirements of duckietown-world.
  * 2 : duckietown-world was not found: Double check that all installations were completed IN the virtual environment, especially the setup of duckietown-world.
- * 3 : The duckiebot does not see and crashes in obstacles. Have you spawned to many obstacles / actors? We have seen that too many obstacles / actors introduce a delay into the simulation which makes it impossible to avoid them in an effective manner.
+ * 3 : The duckiebot does not see and crashes in obstacles. Have you spawned too many obstacles / actors? We have seen that too many obstacles / actors introduce a delay into the simulation which makes it impossible to avoid them in an effective manner.
  
 
 
