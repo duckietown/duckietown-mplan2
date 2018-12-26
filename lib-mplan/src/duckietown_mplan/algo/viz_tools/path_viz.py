@@ -87,9 +87,11 @@ class PathViz(WorkerBase):
 
         rospy.wait_for_message("obst_avoid/trajectory", mpmsg.TimedPath)
 
-
-
     def trajectoryCb(self, data):
+        """
+        callback for subscriber on the trajector. saves trajector to member
+        variable
+        """
         # save the trajectory to member variable
         self.trajectory.fromMsg(data)
 

@@ -13,10 +13,6 @@ class Obstacle:
     """
     Represents an obstacle in the world frame
 
-    # TODO decide in which frame these parameters are given
-    # add type specifier and object specifier as member
-
-
     Parameters
     ----------
     x: float
@@ -66,12 +62,21 @@ class Obstacle:
         self.init_obstacles_fun()
 
     def __del__(self):
+        """
+        The destructor
+        """
         pass
 
     def __str__(self):
+        """
+        convert the object to a string for printing
+        """
         return 'position: ({} / {}) \n velocity: ({} / {}) \n radius: {}'.format(self.x, self.y, self.x_dot, self.y_dot, self.radius)
 
     def init_obstacles_fun(self):
+        """
+        initialize the symbolic obstacle cost function
+        """
         x = sp.Symbol('x')
         y = sp.Symbol('y')
         obs_x = sp.Symbol('obs_x')
@@ -90,13 +95,19 @@ class Obstacle:
 
         self.getCost = sp.lambdify([x, y, t, obs_x, obs_y, obs_x_dot, obs_y_dot, radius ], obstacle_cost_fun)
 
-        # DEBUG VISUALIZATIONS
-        # print "init obstacle fun"
-        # print self.obstacles_fun
-        # self.obstacles_fun.subs([(t,10)])
-        # sp.plotting.plot3d(self.obstacles_fun, (x, 0, 1.5), (y, -0.2, 0.2), xlim=[-0.1,1.5], ylim=[-0.3,0.3])
-
     def mapToPositiveAngle(self, angle):
+        """
+        map an angle to [0, 2pi]
+
+        Parameters
+        ----------
+        angle: float
+        an angle in radian in [-inf, inf]
+
+        Returns
+        -------
+        float: the mapped angle in radian
+        """
         if angle >= 2*math.pi:
             angle -= 2*math.pi
         elif angle < 0:
@@ -162,11 +173,6 @@ class Obstacle:
         self.y_dot = 0 # TODO
         list = [msg.scale.x, msg.scale.y, msg.scale.z]
         self.radius = max(list)+0.10
-        # max(list)/2
-        # print(self.radius)
-        # print(self)
-        # print(self.radius)
-
 
     def getState(self):
         """

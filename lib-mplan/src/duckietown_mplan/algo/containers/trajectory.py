@@ -57,6 +57,9 @@ class Trajectory:
     """
 
     def __init__(self):
+        """
+        the constructor
+        """
         self.start_time = rospy.Time.now()
         self.duration = 0
         self.ts = 0
@@ -66,17 +69,26 @@ class Trajectory:
         self.upper_bounds = []
 
     def __del__(self):
+        """
+        the destructor
+        """
         pass
 
     def __str__(self):
+        """
+        convert the object to a string for printing
+        """
         return self.positions.__str__()
 
     def updateInterpolation(self):
+        """
+        update the interpolation function. Should be called if the interval
+        of discrete trajectory points was updated or switched
+        """
         x = [elem[0] for elem in self.positions]
         y = [elem[1] for elem in self.positions]
         self.f_x = interp1d(self.times, x, kind='linear')
         self.f_y = interp1d(self.times, y, kind='linear')
-
 
     def getPositionFromTimePoint(self, time_point):
         """

@@ -9,10 +9,8 @@ import os
 import tf
 import math
 import random
-
 import mplan_msgs.msg as mpmsg
 from visualization_msgs.msg import Marker
-
 
 from duckietown_mplan.algo.containers import Obstacle
 
@@ -20,14 +18,48 @@ class MapManipulator:
     """Handy methods for map manipulation"""
 
     def __init__(self, tile_size):
+        """
+        initialize map manipulator object
+
+        Parameters
+        ----------
+        tile_size: float
+            length of a tile side in meters
+
+        Returns
+        -------
+        empty
+        """
         self.tile_size = tile_size
         self.always_go_straight = rospy.get_param('always_go_straight')
 
-
     def __del__(self):
+        """
+        destructor
+
+        Parameters
+        ----------
+        empty
+
+        Returns
+        -------
+        empty
+        """
         pass
 
     def mapToPositiveAngle(self, angle):
+        """
+        map an angle to [0, 2pi]
+
+        Parameters
+        ----------
+        angle: float
+            an angle in radian in [-inf, inf]
+
+        Returns
+        -------
+        float: the mapped angle in radian
+        """
         if angle >= 2*math.pi:
             angle -= 2*math.pi
         elif angle < 0:
@@ -35,6 +67,19 @@ class MapManipulator:
         return angle
 
     def parseMapToTileList(self, map):
+        """
+        parse a map to a list of tiles
+
+        Parameters
+        ----------
+        map: MarkerArray
+            an array of markers as published by duckietown_vizualisation
+
+        Returns
+        -------
+        list of dicts: the list of tiles where every tile is a dict with entries
+        position, type and entry angle
+        """
         # find the closest tile and return its position and orientation
         tiles = []
         for elem in map.markers:
@@ -48,6 +93,22 @@ class MapManipulator:
         return tiles
 
     def findClosestTile(self, x, y, tile_list):
+        """
+        find the tile which lies closest to a point x,y
+
+        Parameters
+        ----------
+        x: float
+            the x position of the point
+        y: float
+            the y position of the point
+        tile_list: list of dicts
+            a list containing all tiles as produced by MapManipulator.parseMapToTileList()
+
+        Returns
+        -------
+        dict: the closest tile
+        """
         tile_positions = [elem['position'] for elem in tile_list]
         tile_positions = np.asarray(tile_positions)
         deltas = tile_positions[:,:2] - [x, y]
@@ -55,19 +116,79 @@ class MapManipulator:
         return tile_list[np.argmin(dist_2)]
 
     def distToTile(self, x, y, tile):
+        """
+        get the distance from a point x,y to the midpoint of a specific tile
+
+        Parameters
+        ----------
+        x: float
+            the x position of the point
+        y: float
+            the y position of the point
+        tile: dict
+            the tile to which the distance is desired
+
+        Returns
+        -------
+        float: the distance
+        """
         return ((x-tile['position'][0])**2 + (y-tile['position'][1])**2)**0.5
 
     def distVecFromTile(self, x, y, tile):
+        """
+        get the distance vector from a point x,y to the midpoint of a specific tile
+
+        Parameters
+        ----------
+        x: float
+            the x position of the point
+        y: float
+            the y position of the point
+        tile: dict
+            the tile to which the distance is desired
+
+        Returns
+        -------
+        np.array: the 3x1 distance vector in world coordinates
+        """
         return np.asarray([x-tile['position'][0], y-tile['position'][1]])
 
     def getUnitVecFromTheta(self, theta, length=1):
+        """
+        get a unit vector in the xy plane pointing in the direction of theta
+
+        Parameters
+        ----------
+        x: theta
+            angle in radian corresponding to the direction of the desired vector
+        y: length
+            length of the returned vector
+
+        Returns
+        -------
+        np.array: the 3x1 vector with direction of theta
+        """
         return np.asarray([math.cos(theta), math.sin(theta), 0])*length
 
     def getNextTile(self, tile, tile_list):
+        """
+        get the next tile to which the street on the current tile will lead to.
+        If the current tile is an intersection the next tile will be chosen at
+        random.
+
+        Parameters
+        ----------
+        tile: dict
+            the tile to which the distance is desired
+        tile_list: list of dicts
+            a list containing all tiles as produced by MapManipulator.parseMapToTileList()
+
+        Returns
+        -------
+        dict: the next tile
+        """
         delta_theta = tile['entry_angle']-tile['position'][2]
         delta_theta = self.mapToPositiveAngle(delta_theta)
-        print('delta_theta of', tile['type'], tile['entry_angle'], tile['position'][2], delta_theta)
-
 
         xy = [0,0,0]
         next_entry_angle = 0
@@ -114,6 +235,22 @@ class MapManipulator:
         return next_tile
 
     def getMarker(self, marker_id, tile):
+        """
+        convert the tile to an arrow representing the entry angle of the
+        duckiebot into the tile's street. This arrow can be visualized in rviz
+
+        Parameters
+        ----------
+        marker_id: int
+            the id for the marker
+        tile: dict
+            the tile to be converted to a arrow marker
+
+        Returns
+        -------
+        Marker: the arrow marker with the correct position
+        """
+
         marker = Marker()
 
         marker.header.frame_id = "/map"
@@ -146,8 +283,19 @@ class MapManipulator:
 
     def rotation_matrix(self, theta, axis=[0,0,1]):
         """
-        Return the rotation matrix associated with counterclockwise rotation about
-        the given axis by theta radians.
+        get the rotation matrix corresponding to a counterclockwise rotation of
+        theta around a specific axis
+
+        Parameters
+        ----------
+        theta: float
+            the desired rotation angle in radian
+        axis: 3x1 list
+            the vector around whicht the rotation should be induced
+
+        Returns
+        -------
+        np.array: 3x3 the rotation matrix
         """
         axis = np.asarray(axis)
         axis = axis / math.sqrt(np.dot(axis, axis))
@@ -160,6 +308,30 @@ class MapManipulator:
                          [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
 
     def getCostGridOrigin(self, tile_current, tile_next, actor):
+        """
+        get the position and orientation of the point at which the cost grid's
+        origin should be placed. Lattitudewise this position will always be in
+        the middle of the street, longitudewise the position will be the
+        projection of the duckiebots position on to the middle-line of the
+        street. The orientation will always be according to the streeght
+        orientation if it is a straight or according to the desired path
+        curvature if the street is a curve or intersection.
+
+        Parameters
+        ----------
+        tile_current: dict
+            the tile on which the duckiebot is currently on_shut
+        tile_next: dict
+            the tile on which the duckiebot will be next after leaving the
+            current tile
+        actor: class obstacle
+            obstacle representing the duckiebot which is controlled by the
+            obstavoid algorithm
+
+        Returns
+        -------
+        list: 3x1 the x, y, theta position of the cost grid
+        """
         type = tile_current['type']
         entry_angle_difference = self.mapToPositiveAngle(tile_next['entry_angle']-tile_current['entry_angle'])
 
@@ -225,6 +397,22 @@ class MapManipulator:
         return cost_grid_origin
 
     def getDistToCenterline(self, tile, x, y):
+        """
+        get the distance from point x,y to the centerline of a specific tile
+
+        Parameters
+        ----------
+        tile: dict
+            the tile to which's centerline the distance should be calculated
+        x: float
+            the x position of the point
+        y: float
+            the y position of the point
+
+        Returns
+        -------
+        float: the distance
+        """
         d = self.distVecFromTile(x, y, tile)
         e = self.getUnitVecFromTheta(tile['entry_angle'] + math.pi / 2)[:2]
 

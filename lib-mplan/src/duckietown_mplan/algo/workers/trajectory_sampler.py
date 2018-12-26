@@ -46,7 +46,7 @@ class TrajectorySampler(WorkerBase):
 
     def init(self):
         """
-        Initialise all members of class.
+        Initialize all members of class.
 
         Parameters
         ----------
@@ -104,9 +104,16 @@ class TrajectorySampler(WorkerBase):
         rospy.wait_for_message("obst_avoid/trajectory", mpmsg.TimedPath)
 
     def trajectoryCb(self, data):
+        """
+        callback for subscriber on trajectory topic. Saves trajectory to member
+        variable
+        """
         self.trajectory.fromMsg(data)
 
     def actorCb(self, data):
+        """
+        callback for subriber on actor state. Saves actor as member variable
+        """
         self.actor.fromMsg(data.moving_object)
 
     def advance(self, Ts=1.0):
@@ -139,26 +146,6 @@ class TrajectorySampler(WorkerBase):
 
         # velocity needed to reach target positon within target_time
         vel_set = self.k_vel * dist_to_target / self.target_time
-
-        # # angular error and distance to line between trajectory position and target position
-        # if(x_set == x_set_now and y_set == y_set_now):
-        #     phi_ref = math.atan2(y_set - y_act, x_set - x_act)
-        #     phi_est = math.atan2(y_act_dot, x_act_dot)
-        #
-        #     d_ref = 0
-        #     d_est = 0
-        #
-        # else:
-        #     phi_ref = math.atan2(y_set - y_set_now, x_set - x_set_now)
-        #     phi_est = math.atan2(y_act_dot, x_act_dot)
-        #
-        #     d_ref = 0
-        #     d_est = math.fabs((y_set - y_set_now) * x_act - (x_set - x_set_now) * y_act + x_set * y_set_now - y_set * x_set_now) / math.sqrt((x_set - x_set_now)**2 + (y_set - y_set_now)**2)
-        #
-        # ref = (6 * d_ref + 1 * phi_ref)
-        # est = (6 * d_est + 1 * phi_est)
-        # err = ref - est
-        # # print('phi_ref: %f, %f', phi_ref, phi_est)
 
         d_ref = 0
         d_est = 0

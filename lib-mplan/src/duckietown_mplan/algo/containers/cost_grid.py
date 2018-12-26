@@ -16,12 +16,8 @@ class CostGrid:
         represents wheter the cost grid has been populated. Has to be set
         manually by the populator object after population
 
-    n_x: int
-        size of cost grid in x direction
-
-    n_y: int
-        size of cost grid in y direction
-
+    costs: nx.DiGraph
+        the graph representing the cost grid
     """
 
     def __init__(self):
@@ -71,6 +67,7 @@ class CostGrid:
         empty
         """
         self.costs.nodes[(x, y, t)]['node_weight'] = cost
+
     def getCost(self, x, y, t):
         """
         Get the value of the cost grid at a certain point
@@ -111,6 +108,7 @@ class CostGrid:
         empty
         """
         self.costs.nodes[(x, y, t)]['x_pos'] = x_pos
+
     def getXPos(self, x, y, t):
         """
         Get the x_pos of the cost grid at a certain node in the cost grid frame
@@ -151,6 +149,7 @@ class CostGrid:
         empty
         """
         self.costs.nodes[(x, y, t)]['x_world'] = x_world
+
     def getXWorld(self, x, y, t):
         """
         Get the x_world of the cost grid at a certain point
@@ -191,6 +190,7 @@ class CostGrid:
         empty
         """
         self.costs.nodes[(x, y, t)]['y_pos'] = y_pos
+
     def getYPos(self, x, y, t):
         """
         Get the y_pos of the cost grid at a certain node in the cost grid frame
@@ -231,6 +231,7 @@ class CostGrid:
         empty
         """
         self.costs.nodes[(x, y, t)]['y_world'] = y_world
+
     def getYWorld(self, x, y, t):
         """
         Get the y_world of the cost grid at a certain point
@@ -271,6 +272,7 @@ class CostGrid:
         empty
         """
         self.costs.nodes[(x, y, t)]['t_pos'] = t_pos
+
     def getTPos(self, x, y, t):
         """
         Get the t_pos of the cost grid at a certain point

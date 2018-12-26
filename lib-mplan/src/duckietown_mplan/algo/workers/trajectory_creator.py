@@ -131,9 +131,17 @@ class TrajectoryCreator(WorkerBase):
         self.tile_next = self.map_manipulator.getNextTile(self.tile_current, self.tiles)
 
     def actorCb(self, data):
+        """
+        callback for subscriber on actor state topic. Saves the actor to a
+        member variable
+        """
         self.actor.fromMsg(data.moving_object)
 
     def obstacleCb(self, data):
+        """
+        callback for subscriber on obstacle states topic. Saves the obstacles
+        to a member variable
+        """
         self.obstacle_list = []
         for obstacle_msg in list(data.moving_objects):
             new_obstacle = Obstacle()
@@ -142,6 +150,10 @@ class TrajectoryCreator(WorkerBase):
             self.obstacle_list.append(new_obstacle)
 
     def streetObstructionCb(self, data):
+        """
+        callback for subscriber on a street obstruction. Saves the street
+        obstruction to a member variable
+        """
         self.street_obstructions = []
 
         for i in range(0, self.num_obstructions):
@@ -150,6 +162,20 @@ class TrajectoryCreator(WorkerBase):
             self.street_obstructions.append(street_obstruction)
 
     def publishTiles(self, tile1, tile2):
+        """
+        publish the tiles as arrows for rviz visualization
+
+        Parameters
+        ----------
+        tile1: dict
+            the first tile to be published
+        tile2: dict
+            the second tile to be published
+
+        Returns
+        -------
+        none
+        """
         marker_msg = MarkerArray()
         marker_msg.markers.append(self.map_manipulator.getMarker(1, tile1))
         marker_msg.markers.append(self.map_manipulator.getMarker(2, tile2))
